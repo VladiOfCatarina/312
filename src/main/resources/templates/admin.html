@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Page</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .links-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .links-container a {
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .filter-form {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Admin Dashboard</h1>
+<!-- Добавьте проверку на null -->
+<h2 th:if="${user != null}">Welcome, <span th:text="${user.name}">Admin</span>!</h2>
+<h2 th:if="${user == null}">Welcome, Admin!</h2>
+
+<h3>User List</h3>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Email</th>
+        <th>Birthday</th>
+        <th>Can Drive</th>
+        <th>Roles</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}">1</td>
+        <td th:text="${user.name}">Name</td>
+        <td th:text="${user.surname}">Surname</td>
+        <td th:text="${user.email}">email@example.com</td>
+        <td th:text="${user.birthday}">1990-01-01</td>
+        <td th:text="${user.candrive} ? 'Yes' : 'No'">Yes</td>
+        <td>
+            <span th:each="role : ${user.roles}" th:text="${role.name} + ' '">ROLE_USER</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+<a href="/admin/add">Add new</a>
+<a href="/admin/edit">Edit user</a>
+<a href="/admin/delete">Delete user</a>
+<a href="/admin/getuserinfo">Find user by id</a>
+<a href="/logout">Logout</a>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User info for admin</title>
+</head>
+<body>
+<h1>User Profile</h1>
+
+<!-- Отображение ошибки -->
+<div th:if="${error}" th:text="${error}" style="color: red; margin-bottom: 20px;"></div>
+
+<div th:if="${user == null}">
+    <form th:action="@{/admin/getuserinfo}" method="post">
+        <label for="id">User ID:</label>
+        <input type="number" id="id" name="id" required>
+        <button type="submit">Find</button>
+    </form>
+</div>
+
+<div th:if="${user != null}">
+    <p><strong>Name:</strong> <span th:text="${user.name}">Name</span></p>
+    <p><strong>Surname:</strong> <span th:text="${user.surname}">Surname</span></p>
+    <p><strong>Email:</strong> <span th:text="${user.email}">email@example.com</span></p>
+    <p><strong>Birthday:</strong> <span th:text="${user.birthday}">1990-01-01</span></p>
+    <p><strong>Can Drive:</strong> <span th:text="${user.candrive} ? 'Yes' : 'No'">Yes</span></p>
+    <p><strong>Roles:</strong>
+        <span th:each="role : ${user.roles}" th:text="${role.name} + ' '">ROLE_USER</span>
+    </p>
+</div>
+
+<a href="/admin">Home page</a>
+<a href="/logout">Logout</a>
+</body>
+</html>

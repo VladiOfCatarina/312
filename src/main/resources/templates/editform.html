@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit form</title>
+</head>
+<body>
+<!-- Блок для ввода ID (когда user не найден) -->
+<div th:if="${user == null}">
+    <h1>Edit user</h1>
+    <form th:action="@{/admin/edit}" method="get">
+        <label for="id">User ID:</label>
+        <input type="number" id="id" name="id" required>
+        <button type="submit">Edit</button>
+    </form>
+    <a href="/admin">Home page</a>
+</div>
+
+<!-- Блок для редактирования (когда user найден) -->
+<div th:if="${user != null}">
+    <h2>Edit form</h2>
+    <form th:action="@{/admin/edit}" th:object="${user}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+
+        <div>
+            <label>Name:</label>
+            <input type="text" th:field="*{name}" required/>
+        </div>
+
+        <div>
+            <label>Surname:</label>
+            <input type="text" th:field="*{surname}" required/>
+        </div>
+
+        <div>
+            <label>Birthday:</label>
+            <input type="date" th:field="*{birthday}" required/>
+        </div>
+
+        <div>
+            <label>Email:</label>
+            <input type="email" th:field="*{email}" required/>
+        </div>
+
+        <div>
+            <label>Can drive?</label>
+            <select th:field="*{candrive}">
+                <option th:value="true">Yes</option>
+                <option th:value="false">No</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Roles:</label>
+            <div>
+                <label>
+                    <input type="checkbox" name="roleNames" value="ROLE_USER"
+                           th:checked="${#sets.contains(user.roles.![name], 'ROLE_USER')}"/> USER
+                </label>
+                <label>
+                    <input type="checkbox" name="roleNames" value="ROLE_ADMIN"
+                           th:checked="${#sets.contains(user.roles.![name], 'ROLE_ADMIN')}"/> ADMIN
+                </label>
+            </div>
+        </div>
+
+        <div>
+            <label>Password:</label>
+            <input type="password" name="password" placeholder="Leave blank to keep current"/>
+        </div>
+
+        <button type="submit">Update user</button>
+    </form>
+    <a href="/admin">Home page</a>
+</div>
+
+<a href="/logout">Logout</a>
+
+</body>
+</html>
