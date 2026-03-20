@@ -1,35 +1,109 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>User info for admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Find User</title>
 </head>
 <body>
-<h1>User Profile</h1>
+<nav class="navbar navbar-dark bg-dark px-4">
+    <span class="navbar-brand mb-0 h1">
+        Find User
+    </span>
+    <ul class="navbar-nav px-4">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="/logout">Logout</a>
+        </li>
+    </ul>
+</nav>
 
-<!-- Отображение ошибки -->
-<div th:if="${error}" th:text="${error}" style="color: red; margin-bottom: 20px;"></div>
+<div class="d-flex flex-fill">
+    <div class="d-flex flex-column pt-3" style="width: 250px">
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/admin">Admin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user">User</a>
+            </li>
+        </ul>
+    </div>
 
-<div th:if="${user == null}">
-    <form th:action="@{/admin/getuserinfo}" method="post">
-        <label for="id">User ID:</label>
-        <input type="number" id="id" name="id" required>
-        <button type="submit">Find</button>
-    </form>
+    <main class="d-flex flex-column flex-fill bg-light p-4" style="min-height: 100vh">
+        <h1>Find User by ID</h1>
+
+        <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}">
+            Error message
+        </div>
+
+        <div th:if="${user == null and error == null}">
+            <div style="background: white; border: 1px solid #DCDFE3; border-radius: 5px;" class="p-4">
+                <form th:action="@{/admin/getuserinfo}" method="post">
+                    <div class="form-group">
+                        <label><b>User ID:</b></label>
+                        <input type="number" name="id" class="form-control" style="width: 50%;" required>
+                        <small class="form-text text-muted">Enter the ID of the user you want to view</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Find User</button>
+                    <a href="/admin" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+
+        <div th:if="${user != null}">
+            <div style="background: white; border: 1px solid #DCDFE3; border-radius: 5px;" class="p-4">
+                <h3>User Information</h3>
+                <table class="table table-striped">
+                    <tr>
+                        <th>ID</th>
+                        <td th:text="${user.id}">1</td>
+                    </tr>
+                    <tr>
+                        <th>First Name</th>
+                        <td th:text="${user.name}">Name</td>
+                    </tr>
+                    <tr>
+                        <th>Last Name</th>
+                        <td th:text="${user.surname}">Surname</td>
+                    </tr>
+                    <tr>
+                        <th>Birthday</th>
+                        <td th:text="${user.birthday}">1990-01-01</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td th:text="${user.email}">email@example.com</td>
+                    </tr>
+                    <tr>
+                        <th>Can Drive</th>
+                        <td th:text="${user.candrive} ? 'Yes' : 'No'">Yes</td>
+                    </tr>
+                    <tr>
+                        <th>Roles</th>
+                        <td>
+                            <span th:each="role : ${user.roles}" th:text="${role.name} + ' '">ROLE_USER</span>
+                        </td>
+                    </tr>
+                </table>
+                <a href="/admin/getuserinfo" class="btn btn-primary">Find Another User</a>
+                <a href="/admin" class="btn btn-secondary">Back to Admin</a>
+            </div>
+        </div>
+    </main>
 </div>
 
-<div th:if="${user != null}">
-    <p><strong>Name:</strong> <span th:text="${user.name}">Name</span></p>
-    <p><strong>Surname:</strong> <span th:text="${user.surname}">Surname</span></p>
-    <p><strong>Email:</strong> <span th:text="${user.email}">email@example.com</span></p>
-    <p><strong>Birthday:</strong> <span th:text="${user.birthday}">1990-01-01</span></p>
-    <p><strong>Can Drive:</strong> <span th:text="${user.candrive} ? 'Yes' : 'No'">Yes</span></p>
-    <p><strong>Roles:</strong>
-        <span th:each="role : ${user.roles}" th:text="${role.name} + ' '">ROLE_USER</span>
-    </p>
-</div>
-
-<a href="/admin">Home page</a>
-<a href="/logout">Logout</a>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>

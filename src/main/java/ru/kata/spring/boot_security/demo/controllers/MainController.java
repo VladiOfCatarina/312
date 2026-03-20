@@ -45,11 +45,11 @@ public class MainController {
         return "admin";
     }
 
-    @GetMapping("/admin/add")
-    public String addForm(Model model) {
-        model.addAttribute("user", new User());
-        return "addform";
-    }
+//    @GetMapping("/admin/add")
+//    public String addForm(Model model) {
+//        model.addAttribute("user", new User());
+//        return "addform";
+//    }
 
     @PostMapping("/admin/add")
     public String create(@RequestParam("name") String name,
