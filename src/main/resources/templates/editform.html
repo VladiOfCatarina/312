@@ -2,79 +2,120 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Edit form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Edit User</title>
 </head>
 <body>
-<!-- Блок для ввода ID (когда user не найден) -->
-<div th:if="${user == null}">
-    <h1>Edit user</h1>
-    <form th:action="@{/admin/edit}" method="get">
-        <label for="id">User ID:</label>
-        <input type="number" id="id" name="id" required>
-        <button type="submit">Edit</button>
-    </form>
-    <a href="/admin">Home page</a>
-</div>
+<nav class="navbar navbar-dark bg-dark px-4">
+    <span class="navbar-brand mb-0 h1">
+        Edit User
+    </span>
+    <ul class="navbar-nav px-4">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="/logout">Logout</a>
+        </li>
+    </ul>
+</nav>
 
-<!-- Блок для редактирования (когда user найден) -->
-<div th:if="${user != null}">
-    <h2>Edit form</h2>
-    <form th:action="@{/admin/edit}" th:object="${user}" method="post">
-        <input type="hidden" th:field="*{id}"/>
+<div class="d-flex flex-fill">
+    <div class="d-flex flex-column pt-3" style="width: 250px">
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/admin">Admin</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/user">User</a>
+            </li>
+        </ul>
+    </div>
 
-        <div>
-            <label>Name:</label>
-            <input type="text" th:field="*{name}" required/>
-        </div>
+    <main class="d-flex flex-column flex-fill bg-light p-4" style="min-height: 100vh">
+        <div th:if="${user != null}">
+            <h1>Edit User</h1>
+            <div style="background: white; border: 1px solid #DCDFE3; border-radius: 5px;" class="p-4">
+                <form th:action="@{/admin/edit}" th:object="${user}" method="post">
+                    <input type="hidden" th:field="*{id}"/>
 
-        <div>
-            <label>Surname:</label>
-            <input type="text" th:field="*{surname}" required/>
-        </div>
+                    <div class="form-group">
+                        <label><b>First Name</b></label>
+                        <input type="text" th:field="*{name}" class="form-control" style="width: 50%;" required/>
+                    </div>
 
-        <div>
-            <label>Birthday:</label>
-            <input type="date" th:field="*{birthday}" required/>
-        </div>
+                    <div class="form-group">
+                        <label><b>Last Name</b></label>
+                        <input type="text" th:field="*{surname}" class="form-control" style="width: 50%;" required/>
+                    </div>
 
-        <div>
-            <label>Email:</label>
-            <input type="email" th:field="*{email}" required/>
-        </div>
+                    <div class="form-group">
+                        <label><b>Birthday</b></label>
+                        <input type="date" th:field="*{birthday}" class="form-control" style="width: 50%;" required/>
+                    </div>
 
-        <div>
-            <label>Can drive?</label>
-            <select th:field="*{candrive}">
-                <option th:value="true">Yes</option>
-                <option th:value="false">No</option>
-            </select>
-        </div>
+                    <div class="form-group">
+                        <label><b>Email</b></label>
+                        <input type="email" th:field="*{email}" class="form-control" style="width: 50%;" required/>
+                    </div>
 
-        <div>
-            <label>Roles:</label>
-            <div>
-                <label>
-                    <input type="checkbox" name="roleNames" value="ROLE_USER"
-                           th:checked="${#sets.contains(user.roles.![name], 'ROLE_USER')}"/> USER
-                </label>
-                <label>
-                    <input type="checkbox" name="roleNames" value="ROLE_ADMIN"
-                           th:checked="${#sets.contains(user.roles.![name], 'ROLE_ADMIN')}"/> ADMIN
-                </label>
+                    <div class="form-group">
+                        <label><b>Can Drive?</b></label>
+                        <select th:field="*{candrive}" class="form-control" style="width: 50%;">
+                            <option th:value="true">Yes</option>
+                            <option th:value="false">No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><b>Role</b></label>
+                        <select name="roleNames" class="custom-select bd-primary" size="2" multiple style="width: 50%;">
+                            <option value="ROLE_USER" th:selected="${#sets.contains(user.roles.![name], 'ROLE_USER')}">
+                                USER
+                            </option>
+                            <option value="ROLE_ADMIN"
+                                    th:selected="${#sets.contains(user.roles.![name], 'ROLE_ADMIN')}">ADMIN
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><b>Password</b> <small class="text-muted">(leave blank to keep current)</small></label>
+                        <input type="password" name="password" class="form-control" style="width: 50%;"
+                               placeholder="New password"/>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Update User</button>
+                    <a href="/admin" class="btn btn-secondary">Cancel</a>
+                </form>
             </div>
         </div>
 
-        <div>
-            <label>Password:</label>
-            <input type="password" name="password" placeholder="Leave blank to keep current"/>
+        <div th:if="${user == null}">
+            <h1>Edit User</h1>
+            <div style="background: white; border: 1px solid #DCDFE3; border-radius: 5px;" class="p-4">
+                <form th:action="@{/admin/edit}" method="get">
+                    <div class="form-group">
+                        <label><b>User ID:</b></label>
+                        <input type="number" name="id" class="form-control" style="width: 50%;" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Find User to Edit</button>
+                    <a href="/admin" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
         </div>
-
-        <button type="submit">Update user</button>
-    </form>
-    <a href="/admin">Home page</a>
+    </main>
 </div>
 
-<a href="/logout">Logout</a>
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>
